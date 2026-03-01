@@ -1,0 +1,17 @@
+@import url("https://unpkg.com/leaflet@1.9.4/dist/leaflet.css");
+
+/* Fix Leaflet custom icon styles */
+.custom-bus-icon,
+.custom-stop-icon {
+  background: none !important;
+  border: none !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 12px !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12) !important;
+}
+
+.leaflet-popup-content {
+  margin: 10px 14px !important;
+}
