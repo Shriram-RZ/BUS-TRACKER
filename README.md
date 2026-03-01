@@ -47,10 +47,15 @@ components:
 
 **Useful commands**
 
-- Run the simulation script to generate or update bus data:
+- Start the bus simulation (the backend also does this automatically on
+  startup):
   ```sh
+  # run while the backend is running to keep buses moving
   python simulation.py
   ```
+  This helper will launch the same asyncio tasks used by the server and
+  then sleep indefinitely. It’s useful when you want to exercise the
+  simulation without running the full FastAPI app.
 - Access the interactive shell with the environment activated:
   ```sh
   python
@@ -95,14 +100,69 @@ store it in the appropriate subdirectory and add it to `.gitignore`.
 
 ## Running Tests
 
-No automated tests are included. Add `pytest` or your preferred framework if
-necessary.
+A basic test suite is provided to verify core functionality. The backend uses
+`pytest` along with FastAPI's `TestClient`.
+
+To run the tests:
+
+```sh
+# activate the Python virtual environment (see "Backend Setup")
+cd bustracker_backend
+pip install -r requirements.txt       # ensures pytest is available
+pytest                              # run all tests
+```
+
+The repository currently contains examples for:
+
+- utility functions (`utils.py`)
+- a handful of API endpoints (`routes.py`)
+
+Feel free to expand the `bustracker_backend/tests/` directory with additional
+coverage.
 
 ## Contribution
 
 Feel free to submit pull requests or open issues. Please maintain the
 repository’s coding style and run the development servers locally before
 publishing changes.
+
+---
+
+## Appendices
+
+### Appendix A: API Endpoints
+
+- `GET /routes` – list all configured routes
+- `GET /buses` – list buses currently registered in the system
+- `GET /bus-locations` – fetch live coordinates for every bus; supply
+  `user_lat`/`user_lng` query parameters to calculate ETA to the nearest stop
+- `POST /search-route` – voice‑oriented search that accepts text like
+  "bus from <start> to <end>" and returns the next arriving vehicle
+
+> The Swagger UI at `/docs` exposes the same information interactively.
+
+### Appendix B: Database Schema
+
+- **routes** – stores origin/destination pairs
+- **stops** – ordered waypoints belonging to a route
+- **buses** – individual vehicles tied to a route and carrying an
+  `average_speed_kmph` value
+- **bus_locations** – last reported latitude/longitude for each bus (one-to-one)
+
+Refer to `bustracker_backend/models.py` for details.
+
+### Appendix C: Simulation Details
+
+The `simulation.py` module is responsible for periodically updating
+`bus_locations` and mimicking real‑world movement. When the application
+starts the `lifespan` manager in `main.py` triggers `start_simulation()`.
+You can also run the script manually:
+
+```sh
+python simulation.py
+```
+
+Additional appendices may be added as the project grows.
 
 ## License
 

@@ -16,11 +16,26 @@ INTERPOLATION_STEPS :int =20
 UPDATE_INTERVAL :float =3.0 
 
 
-async def _simulate_bus (bus_id :int ,bus_number :str ,route_id :int )->None :
-    
-    logger .info ("🚌 Starting simulation for Bus %s (id=%d)",bus_number ,bus_id )
+async def _simulate_bus (
+    bus_id: int,
+    bus_number: str,
+    route_id: int,
+    *,
+    max_cycles: int | None = None,  # None == infinite (production), integer for tests
+) -> None:
+    """Continuously update the position of a single bus.
 
-    while True :
+    In normal operation this routine loops forever, cycling through the stops
+    associated with ``route_id`` and interpolating between them. When
+    ``max_cycles`` is provided the function will perform that many full loops
+    before returning; this is primarily intended to make unit tests deterministic
+    and to support the standalone ``python simulation.py`` helper.
+    """
+
+    logger.info("🚌 Starting simulation for Bus %s (id=%d)", bus_number, bus_id)
+
+    cycle_count = 0
+    while max_cycles is None or cycle_count < max_cycles:
 
         db :Session =SessionLocal ()
         try :
@@ -77,6 +92,9 @@ async def _simulate_bus (bus_id :int ,bus_number :str ,route_id :int )->None :
                     db .commit ()
                     await asyncio .sleep (UPDATE_INTERVAL )
 
+            # completed one full route loop
+            cycle_count += 1
+
         except Exception :
             logger .exception ("Error in simulation for Bus %s",bus_number )
             db .rollback ()
@@ -101,3 +119,28 @@ async def start_simulation ()->None :
             )
     finally :
         db .close ()
+
+
+# CLI helper ---------------------------------------------------------------
+async def _cli_main() -> None:
+    """Helper used when running ``python simulation.py`` directly.
+
+    It starts the simulation tasks and then keeps the event loop alive until the
+    process is interrupted.  We purposely avoid blocking behaviour so that
+    Ctrl+C will shutdown cleanly.
+    """
+    await start_simulation()
+    # run forever (until the user presses Ctrl+C)
+    while True:
+        await asyncio.sleep(3600)
+
+
+if __name__ == "__main__":
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(asctime)s  %(levelname)-8s  %(name)s  %(message)s",
+    )
+    try:
+        asyncio.run(_cli_main())
+    except KeyboardInterrupt:
+        logger.info("✋ Simulation interrupted by user, exiting.")
