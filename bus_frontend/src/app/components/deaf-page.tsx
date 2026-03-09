@@ -18,54 +18,54 @@ export function DeafPage() {
   );
 
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] overflow-hidden bg-background">
+    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] overflow-hidden bg-slate-50">
       {/* Sidebar - Route Card & Live ETA Display */}
-      <div className="w-full lg:w-[420px] lg:border-r border-white/10 flex flex-col z-20 bg-[#0B0F19]/95 backdrop-blur-xl relative">
-        <div className="p-6 border-b border-white/10 bg-white/5">
-          <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 mb-4">
+      <div className="w-full lg:w-[420px] lg:border-r border-slate-200 flex flex-col z-20 bg-white">
+        <div className="p-6 border-b border-slate-200 bg-white">
+          <div className="inline-flex items-center justify-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-200 mb-4">
             <BusIcon className="w-4 h-4" />
             <span className="font-semibold tracking-wide uppercase text-xs">Visual Tracking</span>
           </div>
-          <h2 className="text-2xl font-bold text-white tracking-tight m-0">Live Overview</h2>
-          <p className="text-sm text-slate-400 mt-1 mb-0">
+          <h2 className="text-2xl font-bold text-slate-900 tracking-tight m-0">Live Overview</h2>
+          <p className="text-sm text-slate-600 mt-1 mb-0">
             Real-time bus positions with visual ETA indicators
           </p>
         </div>
 
         {/* Route Filter */}
-        <div className="p-6 border-b border-white/10">
-          <label className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-3">
+        <div className="p-6 border-b border-slate-200 bg-white">
+          <label className="text-xs font-semibold text-slate-600 uppercase tracking-wider block mb-3">
             Select Route
           </label>
           <div className="relative">
             <select
-              className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none transition-all hover:bg-white/10"
+              className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 text-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/50 appearance-none transition-all hover:bg-slate-50"
               value={selectedRouteId || ""}
               onChange={(e) => setSelectedRouteId(e.target.value || null)}
               aria-label="Select a route to filter"
             >
-              <option value="" className="bg-[#0B0F19] text-slate-200">All Routes Citywide</option>
+              <option value="" className="bg-white text-slate-800">All Routes Citywide</option>
               {routes.map((r) => (
-                <option key={r.id} value={r.id} className="bg-[#0B0F19] text-slate-200">
+                <option key={r.id} value={r.id} className="bg-white text-slate-800">
                   {r.name}
                 </option>
               ))}
             </select>
             <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-              <Navigation className="w-4 h-4 text-slate-500 rotate-180" />
+              <Navigation className="w-4 h-4 text-slate-400 rotate-180" />
             </div>
           </div>
         </div>
 
         {/* Bus Cards List */}
-        <div className="flex-1 overflow-y-auto hide-scrollbar p-6 space-y-4">
+        <div className="flex-1 overflow-y-auto hide-scrollbar p-6 space-y-4 bg-white">
           <AnimatePresence mode="popLayout">
             {currentLocations.length === 0 ? (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="text-center py-12 text-slate-500 border border-dashed border-white/10 rounded-2xl bg-white/5"
+                className="text-center py-12 text-slate-500 border border-dashed border-slate-200 rounded-2xl bg-slate-50"
               >
                 <AlertCircle className="w-10 h-10 mx-auto mb-3 opacity-40 text-slate-400" />
                 <p className="text-sm font-medium">No buses currently active<br />on this selection.</p>
@@ -102,8 +102,8 @@ export function DeafPage() {
                             <BusIcon className="w-5 h-5" />
                           </div>
                           <div>
-                            <span className="font-semibold text-slate-100 block text-lg">{loc.busName}</span>
-                            <span className="text-xs text-slate-400">{route?.name || "Unknown Route"}</span>
+                            <span className="font-semibold text-slate-900 block text-lg">{loc.busName}</span>
+                            <span className="text-xs text-slate-600">{route?.name || "Unknown Route"}</span>
                           </div>
                         </div>
                         <span
@@ -117,22 +117,22 @@ export function DeafPage() {
                       </div>
 
                       <div className="grid grid-cols-2 gap-3 mt-4 pt-4 border-t border-white/5">
-                        <div className={`flex flex-col p-3 rounded-xl border ${isArrivingSoon ? 'bg-amber-500/10 border-amber-500/20' : 'bg-white/5 border-white/5'
+                        <div className={`flex flex-col p-3 rounded-xl border ${isArrivingSoon ? 'bg-amber-50 border-amber-300' : 'bg-slate-50 border-slate-200'
                           }`}>
                           <div className="flex items-center gap-1.5 mb-1">
                             <Clock className={`w-4 h-4 ${isArrivingSoon ? 'text-amber-400' : 'text-indigo-400'}`} />
                             <span className="text-xs text-slate-400 uppercase tracking-wider font-medium">Arriving in</span>
                           </div>
-                          <span className={`text-xl font-bold tracking-tight ${isArrivingSoon ? 'text-amber-400' : 'text-slate-100'}`}>
+                          <span className={`text-xl font-bold tracking-tight ${isArrivingSoon ? 'text-amber-600' : 'text-slate-900'}`}>
                             {loc.eta} min
                           </span>
                         </div>
-                        <div className="flex flex-col p-3 rounded-xl bg-white/5 border border-white/5">
+                        <div className="flex flex-col p-3 rounded-xl bg-slate-50 border border-slate-200">
                           <div className="flex items-center gap-1.5 mb-1">
                             <MapPin className="w-4 h-4 text-emerald-400" />
                             <span className="text-xs text-slate-400 uppercase tracking-wider font-medium">Position</span>
                           </div>
-                          <span className="text-sm font-semibold tracking-tight text-slate-200 mt-0.5">
+                          <span className="text-sm font-semibold tracking-tight text-slate-800 mt-0.5">
                             {loc.lat.toFixed(3)}<br />{loc.lng.toFixed(3)}
                           </span>
                         </div>
@@ -153,8 +153,6 @@ export function DeafPage() {
           routes={routes}
           selectedRouteId={selectedRouteId}
         />
-        {/* Very subtle gradient overlay linking map and sidebar */}
-        <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-[#0B0F19] to-transparent pointer-events-none z-10 hidden lg:block" />
       </div>
     </div>
   );

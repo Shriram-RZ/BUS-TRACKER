@@ -5,6 +5,9 @@ interface BusContextType {
   buses: Bus[];
   routes: Route[];
   busLocations: BusLocation[];
+  selectedCityId: string | null;
+  cities: { id: string; name: string }[];
+  setSelectedCityId: React.Dispatch<React.SetStateAction<string | null>>;
   setBuses: React.Dispatch<React.SetStateAction<Bus[]>>;
   setRoutes: React.Dispatch<React.SetStateAction<Route[]>>;
   addRoute: (route: Route) => Promise<void>;
@@ -29,11 +32,31 @@ export function BusProvider({ children }: { children: React.ReactNode }) {
   const [buses, setBuses] = useState<Bus[]>([]);
   const [routes, setRoutes] = useState<Route[]>([]);
   const [busLocations, setBusLocations] = useState<BusLocation[]>([]);
+  const [cities, setCities] = useState<{ id: string; name: string }[]>([]);
+  const [selectedCityId, setSelectedCityId] = useState<string | null>(null);
 
   const fetchInitialData = useCallback(async () => {
     try {
-      // Fetch routes
-      const routesRes = await fetch(`${API_BASE}/routes`);
+      // Fetch cities first
+      const citiesRes = await fetch(`${API_BASE}/cities`);
+      if (!citiesRes.ok) throw new Error(`Failed to fetch cities: ${citiesRes.statusText}`);
+      const citiesData = await citiesRes.json();
+      const mappedCities = citiesData.map((c: any) => ({
+        id: c.id.toString(),
+        name: c.name,
+      }));
+      setCities(mappedCities);
+
+      const cityIdToUse =
+        selectedCityId || (mappedCities.length > 0 ? mappedCities[0].id : null);
+      if (!selectedCityId && cityIdToUse) {
+        setSelectedCityId(cityIdToUse);
+      }
+
+      const querySuffix = cityIdToUse ? `?city_id=${cityIdToUse}` : "";
+
+      // Fetch routes for selected city
+      const routesRes = await fetch(`${API_BASE}/routes${querySuffix}`);
       if (!routesRes.ok) throw new Error(`Failed to fetch routes: ${routesRes.statusText}`);
       const routesData = await routesRes.json();
 
@@ -57,8 +80,8 @@ export function BusProvider({ children }: { children: React.ReactNode }) {
       });
       setRoutes(mappedRoutes);
 
-      // Fetch buses
-      const busesRes = await fetch(`${API_BASE}/buses`);
+      // Fetch buses for selected city
+      const busesRes = await fetch(`${API_BASE}/buses${querySuffix}`);
       if (!busesRes.ok) throw new Error(`Failed to fetch buses: ${busesRes.statusText}`);
       const busesData = await busesRes.json();
       const mappedBuses: Bus[] = busesData.map((b: any) => ({
@@ -73,11 +96,12 @@ export function BusProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       console.error("Failed to fetch backend data:", err);
     }
-  }, []);
+  }, [selectedCityId]);
 
   const fetchLocations = useCallback(async () => {
     try {
-      const locRes = await fetch(`${API_BASE}/bus-locations`);
+      const querySuffix = selectedCityId ? `?city_id=${selectedCityId}` : "";
+      const locRes = await fetch(`${API_BASE}/bus-locations${querySuffix}`);
       const locData = await locRes.json();
       const mappedLocs: BusLocation[] = locData.map((l: any) => ({
         busId: l.bus_id.toString(),
@@ -90,7 +114,7 @@ export function BusProvider({ children }: { children: React.ReactNode }) {
     } catch (err) {
       console.error("Failed to fetch live locations:", err);
     }
-  }, []);
+  }, [selectedCityId]);
 
   // Initial load
   useEffect(() => {
@@ -234,6 +258,9 @@ export function BusProvider({ children }: { children: React.ReactNode }) {
         buses,
         routes,
         busLocations,
+        selectedCityId,
+        cities,
+        setSelectedCityId,
         setBuses,
         setRoutes,
         addRoute,

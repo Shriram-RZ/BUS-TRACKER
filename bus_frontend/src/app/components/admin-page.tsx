@@ -143,7 +143,7 @@ export function AdminPage() {
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] bg-background overflow-hidden relative">
+    <div className="flex flex-col lg:flex-row h-[calc(100vh-64px)] bg-slate-50 overflow-hidden relative">
 
       {/* Toast Notification */}
       <AnimatePresence>
@@ -161,47 +161,47 @@ export function AdminPage() {
       </AnimatePresence>
 
       {/* Sidebar - Settings / Control Panel */}
-      <div className="w-full lg:w-[460px] bg-[#0B0F19]/95 backdrop-blur-xl border-r border-white/10 flex flex-col z-20">
-        <div className="p-6 border-b border-white/10 shrink-0">
+      <div className="w-full lg:w-[460px] bg-white border-r border-slate-200 flex flex-col z-20">
+        <div className="p-6 border-b border-slate-200 shrink-0">
           <div className="flex items-center gap-3 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-indigo-500/20 flex items-center justify-center border border-indigo-500/30">
-              <Settings2 className="w-4 h-4 text-indigo-400" />
+            <div className="w-8 h-8 rounded-lg bg-indigo-100 flex items-center justify-center border border-indigo-200">
+              <Settings2 className="w-4 h-4 text-indigo-600" />
             </div>
-            <h2 className="text-xl font-bold text-white tracking-tight m-0">Command Center</h2>
+            <h2 className="text-xl font-bold text-slate-900 tracking-tight m-0">Command Center</h2>
           </div>
-          <p className="text-sm text-slate-400 ml-11">Fleet & Route Management</p>
+          <p className="text-sm text-slate-600 ml-11">Fleet & Route Management</p>
         </div>
 
-        {/* Tabs - Linear Style */}
-        <div className="px-6 pt-4 border-b border-white/10 shrink-0 bg-white/5">
+        {/* Tabs */}
+        <div className="px-6 pt-4 border-b border-slate-200 shrink-0 bg-white">
           <div className="flex gap-6">
             <button
               onClick={() => setTab("routes")}
-              className={`pb-4 text-sm font-medium transition-colors relative ${tab === "routes" ? "text-indigo-400" : "text-slate-400 hover:text-slate-200"
+              className={`pb-4 text-sm font-medium transition-colors relative ${tab === "routes" ? "text-indigo-600" : "text-slate-500 hover:text-slate-900"
                 }`}
             >
               Routes
-              <span className="ml-2 text-xs bg-white/10 px-2 py-0.5 rounded-full">{routes.length}</span>
+              <span className="ml-2 text-xs bg-slate-100 px-2 py-0.5 rounded-full">{routes.length}</span>
               {tab === "routes" && (
-                <motion.div layoutId="admin-tab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-t-full shadow-[0_-2px_8px_rgba(99,102,241,0.5)]" />
+                <motion.div layoutId="admin-tab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-t-full" />
               )}
             </button>
             <button
               onClick={() => setTab("buses")}
-              className={`pb-4 text-sm font-medium transition-colors relative ${tab === "buses" ? "text-indigo-400" : "text-slate-400 hover:text-slate-200"
+              className={`pb-4 text-sm font-medium transition-colors relative ${tab === "buses" ? "text-indigo-600" : "text-slate-500 hover:text-slate-900"
                 }`}
             >
               Fleet
-              <span className="ml-2 text-xs bg-white/10 px-2 py-0.5 rounded-full">{buses.length}</span>
+              <span className="ml-2 text-xs bg-slate-100 px-2 py-0.5 rounded-full">{buses.length}</span>
               {tab === "buses" && (
-                <motion.div layoutId="admin-tab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-t-full shadow-[0_-2px_8px_rgba(99,102,241,0.5)]" />
+                <motion.div layoutId="admin-tab" className="absolute bottom-0 left-0 right-0 h-0.5 bg-indigo-500 rounded-t-full" />
               )}
             </button>
           </div>
         </div>
 
         {/* Panel Content Area */}
-        <div className="flex-1 overflow-y-auto hide-scrollbar p-6 relative">
+        <div className="flex-1 overflow-y-auto hide-scrollbar p-6 relative bg-white">
 
           <AnimatePresence mode="wait">
             {tab === "routes" ? (
@@ -213,7 +213,7 @@ export function AdminPage() {
                 className="space-y-4"
               >
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Active Routes</h3>
+                  <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wider">Active Routes</h3>
                   <AnimatedButton onClick={() => {
                     setShowAddRoute(true)
                     setShowAddBus(false)
@@ -227,7 +227,7 @@ export function AdminPage() {
                   const isExpanded = expandedRoute === route.id;
 
                   return (
-                    <div key={route.id} className="rounded-xl border border-white/10 bg-white/5 overflow-hidden transition-colors hover:border-white/20">
+                    <div key={route.id} className="rounded-xl border border-slate-200 bg-white overflow-hidden transition-colors hover:border-slate-300">
                       <div
                         className="flex items-center justify-between p-4 cursor-pointer"
                         onClick={() => setExpandedRoute(isExpanded ? null : route.id)}
@@ -235,8 +235,8 @@ export function AdminPage() {
                         <div className="flex items-center gap-3">
                           <div className="w-3 h-3 rounded-full shadow-[inset_0_2px_4px_rgba(255,255,255,0.3)]" style={{ backgroundColor: route.color, boxShadow: `0 0 10px ${route.color}80` }} />
                           <div>
-                            <span className="text-sm font-semibold text-slate-200 block">{route.name}</span>
-                            <span className="text-xs text-slate-400 mt-0.5 block">{route.stops.length} Stops &middot; {routeBuses.length} Buses deployed</span>
+                            <span className="text-sm font-semibold text-slate-900 block">{route.name}</span>
+                            <span className="text-xs text-slate-600 mt-0.5 block">{route.stops.length} Stops · {routeBuses.length} Buses deployed</span>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -248,7 +248,7 @@ export function AdminPage() {
                                 showToast("Route and fleet deleted");
                               }
                             }}
-                            className="p-2 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors"
+                            className="p-2 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                             aria-label={`Delete ${route.name}`}
                           >
                             <Trash2 className="w-4 h-4" />
@@ -267,11 +267,11 @@ export function AdminPage() {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="border-t border-white/5 bg-black/20"
+                            className="border-t border-slate-100 bg-slate-50"
                           >
                             <div className="p-4 pl-9 space-y-3 relative">
                               {/* Route Line Indicator */}
-                              <div className="absolute left-6 top-6 bottom-6 w-1 bg-gradient-to-b from-emerald-500/60 via-slate-600/40 to-red-500/60 rounded-full" />
+                              <div className="absolute left-6 top-6 bottom-6 w-1 bg-slate-300 rounded-full" />
 
                               {route.stops.map((stop, i) => {
                                 const isStart = i === 0;
@@ -282,11 +282,9 @@ export function AdminPage() {
 
                                 return (
                                   <div key={stop.id} className="flex items-center gap-3 text-sm relative z-10">
-                                    <div className={`w-3 h-3 rounded-full ${dotColor} outline outline-4 outline-[#0B0F19] shadow-lg`} style={{
-                                      boxShadow: `0 0 8px ${isStart ? "rgba(16, 185, 129, 0.5)" : isDest ? "rgba(239, 68, 68, 0.5)" : "transparent"}`
-                                    }} />
+                                    <div className={`w-3 h-3 rounded-full ${dotColor} outline outline-4 outline-white`} />
                                     <div className="flex-1">
-                                      <p className="text-slate-300 font-medium">{stop.name}</p>
+                                      <p className="text-slate-800 font-medium">{stop.name}</p>
                                       <p className={`text-xs ${labelColor} uppercase tracking-wider font-semibold`}>{label}</p>
                                     </div>
                                     <span className="text-xs text-slate-500 font-mono hidden sm:block">
@@ -312,7 +310,7 @@ export function AdminPage() {
                 className="space-y-4"
               >
                 <div className="flex justify-between items-center mb-6">
-                  <h3 className="text-sm font-semibold text-slate-300 uppercase tracking-wider">Deployed Fleet</h3>
+                  <h3 className="text-sm font-semibold text-slate-700 uppercase tracking-wider">Deployed Fleet</h3>
                   <AnimatedButton onClick={() => {
                     setShowAddBus(true)
                     setShowAddRoute(false)
@@ -326,11 +324,11 @@ export function AdminPage() {
                   const isRunning = bus.status === "running";
 
                   return (
-                    <div key={bus.id} className="rounded-xl border border-white/10 bg-white/5 p-4 flex items-center gap-4 transition-colors hover:border-white/20">
+                    <div key={bus.id} className="rounded-xl border border-slate-200 bg-white p-4 flex items-center gap-4 transition-colors hover:border-slate-300">
                       <div className="relative">
                         <div
-                          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border border-white/10"
-                          style={{ backgroundColor: route ? `${route.color}20` : "rgba(255,255,255,0.05)" }}
+                          className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border border-slate-200"
+                          style={{ backgroundColor: route ? `${route.color}20` : "rgba(226,232,240,0.5)" }}
                         >
                           <BusIcon className="w-6 h-6" style={{ color: route?.color || "#94a3b8" }} />
                         </div>
@@ -340,8 +338,8 @@ export function AdminPage() {
                       </div>
 
                       <div className="flex-1 min-w-0">
-                        <p className="text-sm font-semibold text-slate-200">{bus.name}</p>
-                        <p className="text-xs text-slate-400 truncate mt-0.5">
+                        <p className="text-sm font-semibold text-slate-900">{bus.name}</p>
+                        <p className="text-xs text-slate-600 truncate mt-0.5">
                           {route?.name || "Unassigned"} &middot; {bus.speed} km/h base speed
                         </p>
                       </div>
@@ -350,8 +348,8 @@ export function AdminPage() {
                         <button
                           onClick={() => toggleBusStatus(bus.id)}
                           className={`p-2.5 rounded-lg transition-colors border ${isRunning
-                              ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20 hover:bg-emerald-500/20"
-                              : "text-slate-400 bg-slate-800 border-white/5 hover:bg-slate-700 hover:text-slate-200"
+                              ? "text-emerald-700 bg-emerald-50 border-emerald-200 hover:bg-emerald-100"
+                              : "text-slate-500 bg-slate-100 border-slate-200 hover:bg-slate-200"
                             }`}
                           aria-label={isRunning ? "Suspend operations" : "Resume operations"}
                         >
@@ -361,7 +359,7 @@ export function AdminPage() {
                           onClick={() => {
                             if (confirm(`Recall and decommission ${bus.name}?`)) deleteBus(bus.id);
                           }}
-                          className="p-2.5 text-slate-500 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors border border-transparent hover:border-red-500/20"
+                          className="p-2.5 text-slate-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-200"
                           aria-label={`Decommission ${bus.name}`}
                         >
                           <Trash2 className="w-4 h-4" />
@@ -383,52 +381,52 @@ export function AdminPage() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute lg:inset-y-0 lg:right-0 lg:w-[480px] inset-0 bg-gradient-to-b from-[#0B0F19]/98 to-[#0B0F19]/95 backdrop-blur-2xl z-30 border-l border-white/10 flex flex-col shadow-2xl"
+            className="absolute lg:inset-y-0 lg:right-0 lg:w-[480px] inset-0 bg-white z-30 border-l border-slate-200 flex flex-col shadow-xl"
           >
             {showAddRoute && (
               <div className="flex flex-col h-full">
-                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-gradient-to-r from-white/5 to-transparent">
+                <div className="p-6 border-b border-slate-200 flex justify-between items-center bg-white">
                   <div>
-                    <h3 className="text-lg font-bold text-white tracking-tight">Create New Route</h3>
-                    <p className="text-xs text-slate-400 mt-1">Define route waypoints by clicking on the map</p>
+                    <h3 className="text-lg font-bold text-slate-900 tracking-tight">Create New Route</h3>
+                    <p className="text-xs text-slate-600 mt-1">Define route waypoints by clicking on the map</p>
                   </div>
-                  <button onClick={() => setShowAddRoute(false)} className="p-2 bg-white/5 hover:bg-red-500/10 hover:text-red-400 rounded-full text-slate-400 transition-all duration-200">
+                  <button onClick={() => setShowAddRoute(false)} className="p-2 bg-slate-100 hover:bg-red-50 hover:text-red-500 rounded-full text-slate-500 transition-all duration-200">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-white">
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-widest">Route Designation</label>
+                    <label className="text-xs font-semibold text-slate-700 uppercase tracking-widest">Route Designation</label>
                     <input
                       type="text"
                       placeholder="e.g. Central City Loop"
                       value={newRouteName}
                       onChange={(e) => setNewRouteName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-indigo-500/50 focus:bg-white/10 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 placeholder:text-slate-600 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:border-indigo-500/50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 placeholder:text-slate-400 transition-all"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-widest">Brand Color</label>
+                    <label className="text-xs font-semibold text-slate-700 uppercase tracking-widest">Brand Color</label>
                     <div className="flex items-center gap-4">
                       <input
                         type="color"
                         value={newRouteColor}
                         onChange={(e) => setNewRouteColor(e.target.value)}
-                        className="w-14 h-14 rounded-xl cursor-pointer border-2 border-white/10 hover:border-white/30 transition-all"
+                        className="w-14 h-14 rounded-xl cursor-pointer border-2 border-slate-200 hover:border-slate-400 transition-all"
                       />
                       <div className="flex-1">
-                        <p className="text-xs text-slate-400 mb-1">Selected Color</p>
-                        <p className="text-sm font-mono font-bold text-slate-100">{newRouteColor.toUpperCase()}</p>
+                        <p className="text-xs text-slate-500 mb-1">Selected Color</p>
+                        <p className="text-sm font-mono font-bold text-slate-900">{newRouteColor.toUpperCase()}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="space-y-3">
                     <div className="flex justify-between items-end">
-                      <label className="text-xs font-semibold text-slate-300 uppercase tracking-widest">Waypoints</label>
-                      <span className="text-xs bg-indigo-500/15 text-indigo-300 px-3 py-1.5 rounded-lg w-fit inline-block border border-indigo-500/30 font-medium">
+                      <label className="text-xs font-semibold text-slate-700 uppercase tracking-widest">Waypoints</label>
+                      <span className="text-xs bg-indigo-50 text-indigo-700 px-3 py-1.5 rounded-lg w-fit inline-block border border-indigo-200 font-medium">
                         <MapPin className="w-3 h-3 inline mr-1.5" /> Click map to auto-fill
                       </span>
                     </div>
@@ -444,13 +442,13 @@ export function AdminPage() {
                         return (
                           <div
                             key={i}
-                            className={`flex gap-3 p-3 rounded-lg transition-all border ${isFocused ? 'bg-indigo-500/15 border-indigo-500/40 shadow-lg shadow-indigo-500/10' : 'bg-white/5 border-white/10 hover:border-white/20'
+                            className={`flex gap-3 p-3 rounded-lg transition-all border ${isFocused ? 'bg-indigo-50 border-indigo-200' : 'bg-slate-50 border-slate-200 hover:border-slate-300'
                               }`}
                             onClick={() => setFocusedStopIndex(i)}
                           >
                             <MapPin className={`w-5 h-5 shrink-0 mt-2.5 ${iconColor}`} />
                             <div className="flex-1 space-y-2">
-                              <p className="text-xs font-semibold uppercase tracking-wide" style={{color: isStart ? '#10b981' : isDest ? '#ef4444' : '#94a3b8'}}>
+                              <p className="text-xs font-semibold uppercase tracking-wide" style={{color: isStart ? '#16a34a' : isDest ? '#dc2626' : '#64748b'}}>
                                 {isStart ? 'Start Location' : isDest ? 'Destination' : `Stop ${i}`}
                               </p>
                               <input
@@ -463,7 +461,7 @@ export function AdminPage() {
                                   setNewStops(s);
                                 }}
                                 onFocus={() => setFocusedStopIndex(i)}
-                                className="w-full px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-sm text-slate-200 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/30"
+                                className="w-full px-3 py-2 rounded-lg bg-white border border-slate-200 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-200"
                               />
                               <div className="flex gap-2">
                                 <input
@@ -476,7 +474,7 @@ export function AdminPage() {
                                     setNewStops(s);
                                   }}
                                   onFocus={() => setFocusedStopIndex(i)}
-                                  className="w-1/2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50"
+                                  className="w-1/2 px-3 py-2 rounded-lg bg-white border border-slate-200 text-xs font-mono text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-500/50"
                                 />
                                 <input
                                   type="text"
@@ -488,7 +486,7 @@ export function AdminPage() {
                                     setNewStops(s);
                                   }}
                                   onFocus={() => setFocusedStopIndex(i)}
-                                  className="w-1/2 px-3 py-2 rounded-lg bg-white/5 border border-white/10 text-xs font-mono text-slate-300 placeholder:text-slate-600 focus:outline-none focus:border-indigo-500/50"
+                                  className="w-1/2 px-3 py-2 rounded-lg bg-white border border-slate-200 text-xs font-mono text-slate-800 placeholder:text-slate-400 focus:outline-none focus:border-indigo-500/50"
                                 />
                               </div>
                             </div>
@@ -500,7 +498,7 @@ export function AdminPage() {
                                   setNewStops(newStops.filter((_, j) => j !== i));
                                   if (focusedStopIndex === i) setFocusedStopIndex(null);
                                 }}
-                                className="p-2 self-start mt-1 text-slate-500 hover:bg-red-500/20 hover:text-red-400 rounded-lg transition-colors"
+                                className="p-2 self-start mt-1 text-slate-500 hover:bg-red-50 hover:text-red-500 rounded-lg transition-colors"
                               >
                                 <Trash2 className="w-4 h-4" />
                               </button>
@@ -519,17 +517,17 @@ export function AdminPage() {
                         setNewStops(updated);
                         setFocusedStopIndex(updated.length - 2);
                       }}
-                      className="w-full py-3 rounded-xl border-2 border-dashed border-indigo-500/30 text-indigo-300 text-sm font-medium hover:bg-indigo-500/10 hover:border-indigo-500/50 transition-all flex items-center justify-center gap-2"
+                      className="w-full py-3 rounded-xl border-2 border-dashed border-indigo-200 text-indigo-700 text-sm font-medium hover:bg-indigo-50 hover:border-indigo-400 transition-all flex items-center justify-center gap-2"
                     >
                       <Plus className="w-4 h-4" /> Append Waypoint
                     </button>
                   </div>
                 </div>
 
-                <div className="p-6 border-t border-white/10 bg-gradient-to-r from-white/5 to-transparent gap-3 flex">
+                <div className="p-6 border-t border-slate-200 bg-slate-50 gap-3 flex">
                   <button
                     onClick={() => setShowAddRoute(false)}
-                    className="flex-1 py-3 bg-white/5 text-slate-300 rounded-xl hover:bg-white/10 text-sm font-semibold transition-colors border border-white/10"
+                    className="flex-1 py-3 bg-white text-slate-700 rounded-xl hover:bg-slate-50 text-sm font-semibold transition-colors border border-slate-200"
                   >
                     Cancel
                   </button>
@@ -542,39 +540,39 @@ export function AdminPage() {
 
             {showAddBus && (
               <div className="flex flex-col h-full">
-                <div className="p-6 border-b border-white/10 flex justify-between items-center bg-gradient-to-r from-white/5 to-transparent">
+                <div className="p-6 border-b border-slate-200 flex justify-between items-center bg-white">
                   <div>
-                    <h3 className="text-lg font-bold text-white tracking-tight">Deploy New Bus</h3>
-                    <p className="text-xs text-slate-400 mt-1">Add a vehicle to an existing route</p>
+                    <h3 className="text-lg font-bold text-slate-900 tracking-tight">Deploy New Bus</h3>
+                    <p className="text-xs text-slate-600 mt-1">Add a vehicle to an existing route</p>
                   </div>
-                  <button onClick={() => setShowAddBus(false)} className="p-2 bg-white/5 hover:bg-red-500/10 hover:text-red-400 rounded-full text-slate-400 transition-all duration-200">
+                  <button onClick={() => setShowAddBus(false)} className="p-2 bg-slate-100 hover:bg-red-50 hover:text-red-500 rounded-full text-slate-500 transition-all duration-200">
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
-                <div className="flex-1 p-6 space-y-6 overflow-y-auto">
+                <div className="flex-1 p-6 space-y-6 overflow-y-auto bg-white">
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-widest">Bus Designation / Callsign</label>
+                    <label className="text-xs font-semibold text-slate-700 uppercase tracking-widest">Bus Designation / Callsign</label>
                     <input
                       type="text"
                       placeholder="e.g. Bus 401 Alpha"
                       value={newBusName}
                       onChange={(e) => setNewBusName(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-indigo-500/50 focus:bg-white/10 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 placeholder:text-slate-600 transition-all"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:border-indigo-500/50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 placeholder:text-slate-400 transition-all"
                     />
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-widest">Assign to Route</label>
+                    <label className="text-xs font-semibold text-slate-700 uppercase tracking-widest">Assign to Route</label>
                     <div className="relative">
                       <select
                         value={newBusRouteId}
                         onChange={(e) => setNewBusRouteId(e.target.value)}
-                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-indigo-500/50 focus:bg-white/10 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 appearance-none transition-all"
+                        className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:border-indigo-500/50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 appearance-none transition-all"
                       >
-                        <option value="" className="bg-[#0B0F19] text-slate-200">Select a route destination</option>
+                        <option value="" className="bg-white text-slate-800">Select a route destination</option>
                         {routes.map((r) => (
-                          <option key={r.id} value={r.id} className="bg-[#0B0F19] text-slate-200">
+                          <option key={r.id} value={r.id} className="bg-white text-slate-800">
                             {r.name}
                           </option>
                         ))}
@@ -586,21 +584,21 @@ export function AdminPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <label className="text-xs font-semibold text-slate-300 uppercase tracking-widest">Base Operating Speed (km/h)</label>
+                    <label className="text-xs font-semibold text-slate-700 uppercase tracking-widest">Base Operating Speed (km/h)</label>
                     <input
                       type="number"
                       placeholder="40"
                       value={newBusSpeed}
                       onChange={(e) => setNewBusSpeed(e.target.value)}
-                      className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:border-indigo-500/50 focus:bg-white/10 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500/20 placeholder:text-slate-600 transition-all font-mono"
+                      className="w-full px-4 py-3 rounded-xl bg-white border border-slate-200 focus:border-indigo-500/50 text-slate-900 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200 placeholder:text-slate-400 transition-all font-mono"
                     />
                   </div>
                 </div>
 
-                <div className="p-6 border-t border-white/10 bg-gradient-to-r from-white/5 to-transparent gap-3 flex mt-auto">
+                <div className="p-6 border-t border-slate-200 bg-slate-50 gap-3 flex mt-auto">
                   <button
                     onClick={() => setShowAddBus(false)}
-                    className="flex-1 py-3 bg-white/5 text-slate-300 rounded-xl hover:bg-white/10 text-sm font-semibold transition-colors border border-white/10"
+                    className="flex-1 py-3 bg-white text-slate-700 rounded-xl hover:bg-slate-50 text-sm font-semibold transition-colors border border-slate-200"
                   >
                     Cancel
                   </button>
@@ -614,20 +612,25 @@ export function AdminPage() {
         )}
       </AnimatePresence>
 
-      {/* Main Map Background */}
-      <div className="flex-1 h-full relative z-0 hidden lg:block">
+      {/* Map section */}
+      <div className="flex-1 h-full relative z-0 mt-4 lg:mt-0">
         <BusMap
           buses={buses}
           routes={routes}
           onMapClick={handleMapClick}
           clickMarker={clickMarker}
-          draftStops={showAddRoute ? newStops.filter(s => s.lat && s.lng).map(s => ({
-            name: s.name,
-            lat: parseFloat(s.lat),
-            lng: parseFloat(s.lng)
-          })) : undefined}
+          draftStops={
+            showAddRoute
+              ? newStops
+                  .filter((s) => s.lat && s.lng)
+                  .map((s) => ({
+                    name: s.name,
+                    lat: parseFloat(s.lat),
+                    lng: parseFloat(s.lng),
+                  }))
+              : undefined
+          }
         />
-        <div className="absolute inset-y-0 left-0 w-8 bg-gradient-to-r from-[#0B0F19] to-transparent pointer-events-none z-10" />
       </div>
     </div>
   );

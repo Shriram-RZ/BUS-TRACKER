@@ -1,134 +1,22 @@
-import asyncio 
-import logging 
-from datetime import datetime ,timezone 
+"""
+Legacy entrypoint for bus simulation.
 
-from sqlalchemy .orm import Session 
+The canonical implementation now lives in ``simulation/bus_simulator.py``.
+We re-export the public ``start_simulation`` function so existing imports
+like ``from simulation import start_simulation`` continue to work, and keep
+the CLI helper available.
+"""
 
-from database import SessionLocal 
-from models import Bus ,Stop ,BusLocation 
+import asyncio
+import logging
 
-logger =logging .getLogger ("simulation")
+from .simulation.bus_simulator import start_simulation  # type: ignore[attr-defined]
 
-
-
-
-INTERPOLATION_STEPS :int =20 
-UPDATE_INTERVAL :float =3.0 
-
-
-async def _simulate_bus (
-    bus_id: int,
-    bus_number: str,
-    route_id: int,
-    *,
-    max_cycles: int | None = None,  # None == infinite (production), integer for tests
-) -> None:
-    """Continuously update the position of a single bus.
-
-    In normal operation this routine loops forever, cycling through the stops
-    associated with ``route_id`` and interpolating between them. When
-    ``max_cycles`` is provided the function will perform that many full loops
-    before returning; this is primarily intended to make unit tests deterministic
-    and to support the standalone ``python simulation.py`` helper.
-    """
-
-    logger.info("🚌 Starting simulation for Bus %s (id=%d)", bus_number, bus_id)
-
-    cycle_count = 0
-    while max_cycles is None or cycle_count < max_cycles:
-
-        db :Session =SessionLocal ()
-        try :
-
-            stops =(
-            db .query (Stop )
-            .filter (Stop .route_id ==route_id )
-            .order_by (Stop .stop_order )
-            .all ()
-            )
-
-            if len (stops )<2 :
-                logger .warning (
-                "Bus %s has fewer than 2 stops — skipping simulation cycle.",
-                bus_number ,
-                )
-                await asyncio .sleep (UPDATE_INTERVAL *5 )
-                continue 
+logger = logging.getLogger("simulation")
 
 
-
-
-
-            loop_stops =stops +[stops [0 ]]
-            for i in range (len (loop_stops )-1 ):
-                start_stop =loop_stops [i ]
-                end_stop =loop_stops [i +1 ]
-
-                for step in range (INTERPOLATION_STEPS ):
-
-                    t =step /INTERPOLATION_STEPS 
-                    lat =start_stop .latitude +(end_stop .latitude -start_stop .latitude )*t 
-                    lng =start_stop .longitude +(end_stop .longitude -start_stop .longitude )*t 
-
-
-                    location =(
-                    db .query (BusLocation )
-                    .filter (BusLocation .bus_id ==bus_id )
-                    .first ()
-                    )
-
-                    if location :
-                        location .latitude =lat 
-                        location .longitude =lng 
-                        location .last_updated =datetime .now (timezone .utc )
-                    else :
-                        location =BusLocation (
-                        bus_id =bus_id ,
-                        latitude =lat ,
-                        longitude =lng ,
-                        )
-                        db .add (location )
-
-                    db .commit ()
-                    await asyncio .sleep (UPDATE_INTERVAL )
-
-            # completed one full route loop
-            cycle_count += 1
-
-        except Exception :
-            logger .exception ("Error in simulation for Bus %s",bus_number )
-            db .rollback ()
-            await asyncio .sleep (UPDATE_INTERVAL )
-        finally :
-            db .close ()
-
-
-async def start_simulation ()->None :
-    
-    db :Session =SessionLocal ()
-    try :
-        buses =db .query (Bus ).all ()
-        if not buses :
-            logger .info ("⚠️  No buses in database — simulation idle.")
-            return 
-
-        logger .info ("🚀 Launching simulation for %d bus(es)…",len (buses ))
-        for bus in buses :
-            asyncio .create_task (
-            _simulate_bus (bus .id ,bus .bus_number ,bus .route_id )
-            )
-    finally :
-        db .close ()
-
-
-# CLI helper ---------------------------------------------------------------
 async def _cli_main() -> None:
-    """Helper used when running ``python simulation.py`` directly.
-
-    It starts the simulation tasks and then keeps the event loop alive until the
-    process is interrupted.  We purposely avoid blocking behaviour so that
-    Ctrl+C will shutdown cleanly.
-    """
+    """Helper used when running ``python simulation.py`` directly."""
     await start_simulation()
     # run forever (until the user presses Ctrl+C)
     while True:
@@ -144,3 +32,4 @@ if __name__ == "__main__":
         asyncio.run(_cli_main())
     except KeyboardInterrupt:
         logger.info("✋ Simulation interrupted by user, exiting.")
+
